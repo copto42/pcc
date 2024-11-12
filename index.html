@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuenta Regresiva con Corazón</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .heart {
+            display: inline-block;
+            position: relative;
+            width: 100px;
+            height: 90px;
+            margin-bottom: 20px; /* Espacio entre el corazón y el contador */
+        }
+
+        .heart:before,
+        .heart:after {
+            position: absolute;
+            content: "";
+            left: 50px;
+            top: 0;
+            width: 50px;
+            height: 80px;
+            background-color: #ff0000;
+            border-radius: 50px 50px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+
+        .heart:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
+        #countdown {
+            font-size: 2em;
+            color: #ff0000;
+        }
+
+        .legend {
+            font-style: italic;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="heart"></div> 
+    <div id="countdown"></div>
+    <p class="legend">Cada vez más cerca de ti mi amor atte HCR</p>
+    <button id="startButton">Iniciar Cuenta Regresiva</button>
+
+    <script>
+    const countdownDisplay = document.getElementById('countdown');
+    const startButton = document.getElementById('startButton');
+
+    startButton.addEventListener('click', () => {
+        startButton.disabled = true;
+
+        // Calcula la fecha objetivo (domingo al mediodía)
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + (7 - targetDate.getDay()) % 7); // Avanza al próximo domingo
+        targetDate.setHours(12, 0, 0, 0); // Ajusta la hora al mediodía
+
+        const interval = setInterval(() => {
+            const now = new Date();
+            const distance = targetDate.getTime() - now.getTime();
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownDisplay.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            if (distance < 0) {
+                clearInterval(interval);
+                countdownDisplay.innerHTML = "¡Ha llegado el día!";
+            }
+        }, 1000);
+    });
+</script>
+</body>
+</html>
+
